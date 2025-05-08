@@ -9,3 +9,4 @@ certifi
 PyMuPDF
 openpyxl
 gunicorn
+PyPDF2
