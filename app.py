@@ -10,15 +10,18 @@ import requests
 import json
 import certifi
 import json
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
+load_dotenv()
 
 # Flask setup
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app = Flask(__name__)
-app = Flask(__name__)
+
+
 CORS(app, resources={r"/*": {"origins": ["*", "https://lovable.so"]}})
 
 # Together API setup (use environment variables or .env)
