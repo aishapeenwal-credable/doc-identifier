@@ -10,3 +10,4 @@ PyMuPDF
 openpyxl
 gunicorn
 PyPDF2
+flask-cors
