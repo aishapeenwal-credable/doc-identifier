@@ -145,5 +145,39 @@ def classify():
 
     return jsonify(results)
 
+@app.route("/extract-text", methods=["POST"])
+def extract_text():
+    if "documents" not in request.files:
+        return jsonify({"error": "No files uploaded with key 'documents'"}), 400
+
+    files = request.files.getlist("documents")
+    results = []
+
+    for file in files:
+        filename = secure_filename(file.filename)
+        path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(path)
+
+        mime = detect_file_type(path)
+        text = ""
+
+        if "pdf" in mime:
+            text = extract_text_from_pdf(path)
+            if not text.strip():  # fallback to OCR for scanned PDFs
+                text = extract_text_from_image(path)
+        elif "image" in mime:
+            text = extract_text_from_image(path)
+        elif "excel" in mime or filename.endswith((".xls", ".xlsx")):
+            text = extract_text_from_excel(path)
+        else:
+            text = "Unsupported file type"
+
+        results.append({
+            "file_name": filename,
+            "text": text
+        })
+
+    return jsonify(results)
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
