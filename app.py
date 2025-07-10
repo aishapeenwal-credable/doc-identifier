@@ -38,9 +38,11 @@ def extract_text_from_pdf(path):
 
 def extract_text_from_image(path):
     try:
-        return pytesseract.image_to_string(Image.open(path))
-    except:
-        return ""
+        image = Image.open(path).convert("L")
+        text = pytesseract.image_to_string(image)
+        return text.strip()
+    except Exception as e:
+        return f"OCR error: {str(e)}"
 
 def extract_text_from_excel(path):
     try:
